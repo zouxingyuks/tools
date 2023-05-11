@@ -1,7 +1,6 @@
 package tools
 
 import (
-	"github.com/lestrrat-go/file-rotatelogs"
 	"github.com/sirupsen/logrus"
 	"os"
 	"path/filepath"
