@@ -1,4 +1,4 @@
-module tools
+module github.com/zouxingyuks/tools
 
 go 1.19
 

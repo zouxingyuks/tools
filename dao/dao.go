@@ -1,8 +1,8 @@
 package dao
 
 import (
-	"ele/tools"
 	"errors"
+	"github.com/zouxingyuks/tools"
 	"gorm.io/gorm/clause"
 )
 
