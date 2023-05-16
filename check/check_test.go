@@ -1,6 +1,8 @@
-package tools
+package check
 
-import "testing"
+import (
+	"testing"
+)
 
 func TestCheckChinese(t *testing.T) {
 	type args struct {
@@ -47,7 +49,8 @@ func TestCheckPhoneNumber(t *testing.T) {
 	}{
 		{"合法电话号码-纯数字", args{input: "1234567890"}, true},
 		{"合法电话号码-带横线", args{input: "123-456-7890"}, true},
-		{"合法电话号码-带括号", args{input: "(123) 456-7890"}, true},
+		//此号码过于复杂，不予支持
+		{"不支持手机号码-带括号", args{input: "(123) 456-7890"}, false},
 		{"合法电话号码-国际格式", args{input: "+1 123-456-7890"}, true},
 		{"非法电话号码-不完整", args{input: "123456789"}, false},
 		{"非法电话号码-包含字母", args{input: "abcdefghij"}, false},

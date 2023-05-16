@@ -1,17 +1,18 @@
-package tools
+package config
 
 import (
 	"fmt"
 	"github.com/sirupsen/logrus"
 	"github.com/spf13/viper"
+	"github.com/zouxingyuks/tools/log"
 	"os"
 )
 
 var configLogs *logrus.Entry
 var Configs *viper.Viper
 
-func parseConfig() {
-	configLogs = NewLog("configs")
+func ParseConfig() {
+	configLogs = log.NewLog("configs")
 	// 指定配置文件路径
 	configDir := "./configs/"
 	configName := "config"
@@ -47,7 +48,7 @@ func parseConfig() {
 	}
 }
 
-func loadDefaultConfig() {
+func LoadDefaultConfig() {
 	defaultConfig := map[string]interface{}{
 		"# 下面是默认配置文件": nil,
 		"logs": map[string]interface{}{

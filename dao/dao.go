@@ -1,66 +1,22 @@
 package dao
 
 import (
-	"errors"
-	"github.com/zouxingyuks/tools"
-	"gorm.io/gorm/clause"
+	"github.com/sirupsen/logrus"
+	"github.com/zouxingyuks/tools/config"
+	"gorm.io/driver/mysql"
+	_ "gorm.io/driver/mysql"
+	"gorm.io/gorm"
 )
 
-// FuzzyMatch 模糊搜索，传入查询字段，以及结构值
-func FuzzyMatch[T any](key string, values *T, preload ...string) error {
-	db := tools.DB
-	//加载外键
-	for _, v := range preload {
-		db = db.Preload(v)
-	}
-	return db.Where("name LIKE ?", "%"+key+"%").Find(&values).Error
-}
+var DB *gorm.DB
+var daoLog *logrus.Entry
 
-// PerfectMatch 精准搜索，传入查询结构体
-func PerfectMatch[T any](key *T, values *[]T, preload ...string) error {
-	db := tools.DB
-	//加载外键
-	for _, v := range preload {
-		db = db.Preload(v)
+func InitDao() {
+	dsn := config.Configs.GetString("dao.username") + ":" + config.Configs.GetString("dao.password") + "@tcp(" + config.Configs.GetString("dao.host") + ")/" + config.Configs.GetString("dao.dbname") + "?charset=utf8mb4&parseTime=True&loc=Local"
+	db, err := gorm.Open(mysql.Open(dsn), &gorm.Config{})
+	if err != nil {
+		daoLog.Errorln("数据库连接失败")
+		panic(err)
 	}
-	return db.Find(&values, key).Error
-}
-
-func Add[T any](m *T) error {
-	result := tools.DB.Create(&m)
-	return result.Error
-}
-func Update[T any](m *T) error {
-	result := tools.DB.Updates(&m)
-	return result.Error
-}
-
-// List 列出所有数据
-func List[T any](values *T, preload ...string) (err error) {
-	db := tools.DB
-	//加载外键
-	for _, v := range preload {
-		db = db.Preload(v)
-	}
-	return db.Find(&values).Error
-}
-func Del[T any](value *T, mode int) (err error) {
-	db := tools.DB
-	switch mode {
-	//软删除
-	case 0:
-		err = db.Delete(&value).Error
-	//硬删除
-	case 1:
-		err = db.Unscoped().Delete(&value).Error
-	//级联软删除
-	case 2:
-		err = db.Select(clause.Associations).Delete(&value).Error
-	//级联硬删除
-	case 3:
-		err = db.Select(clause.Associations).Unscoped().Delete(&value).Error
-	default:
-		err = errors.New("delete mode choose wrong")
-	}
-	return err
+	DB = db
 }
