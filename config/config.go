@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"github.com/sirupsen/logrus"
 	"github.com/spf13/viper"
-	"github.com/zouxingyuks/tools/log"
 	"os"
 )
 
@@ -12,7 +11,7 @@ var configLogs *logrus.Entry
 var Configs *viper.Viper
 
 func ParseConfig() {
-	configLogs = log.NewLog("configs")
+	configLogs = NewLog("configs")
 	// 指定配置文件路径
 	configDir := "./configs/"
 	configName := "config"

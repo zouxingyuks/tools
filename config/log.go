@@ -1,9 +1,8 @@
-package log
+package config
 
 import (
 	"github.com/lestrrat-go/file-rotatelogs"
 	"github.com/sirupsen/logrus"
-	"github.com/zouxingyuks/tools/config"
 	"os"
 	"path/filepath"
 	"time"
@@ -15,8 +14,8 @@ func InitLog() {
 	logger = logrus.New()
 	logger.SetFormatter(&logrus.JSONFormatter{})
 
-	logPath := config.Configs.GetString("logs.path")
-	logLevel := config.Configs.GetString("logs.level")
+	logPath := Configs.GetString("logs.path")
+	logLevel := Configs.GetString("logs.level")
 	logDir := filepath.Dir(logPath)
 	// 如果日志文件夹不存在，则创建它
 	if _, err := os.Stat(logDir); os.IsNotExist(err) {
